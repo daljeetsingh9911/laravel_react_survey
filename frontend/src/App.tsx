@@ -1,11 +1,10 @@
 import { useContext, useEffect } from "react";
-import { MyContext, MyContextProps } from "./surveyContext";
 import { Route, Routes, useNavigate } from "react-router-dom";
+
+import { MyContext, MyContextProps } from "./surveyContext";
 import AuthLayout from "./layouts/auth";
-import { Login } from "./pages";
+import { Home, Login } from "./pages";
 import DashboardLayout from "./layouts/dashboard";
-
-
 
 
 const  App = () => {
@@ -14,23 +13,25 @@ const  App = () => {
 
   useEffect(() => {
       if(!userToken){
-          navigate('/auth/login');
+          navigate('/login');
       }
+
   }, []);
     
   return (
    <div>
-      <Routes>
-         <Route  path="/" element={<DashboardLayout/>}>
-            <Route 
-              path="/Home" element={<Login/>}
-              />
-         </Route>
-         <Route  path="/auth" element={<AuthLayout/>}>
+      <Routes >
+         <Route  path="/" element={<AuthLayout/>}>
             <Route 
               path="login" element={<Login/>}
               />
          </Route>
+         <Route  path="dashbord" element={<DashboardLayout/>}>
+            <Route 
+              path="home" element={<Home/>}
+              />
+         </Route>
+         
       </Routes>
    </div>
   )

@@ -2,7 +2,7 @@
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import bg from '../assets/bg.jpg';
+import bg from '../../assets/bg.jpg';
 import { Button, Stack } from 'react-bootstrap';
 
 import { ErrorMessage, Formik } from 'formik';
@@ -35,7 +35,6 @@ const Login = () => {
                 <div className='position-absolute top-0 start-0 end-0 bottom-0' style={{ backgroundColor:'#39bee79e',zIndex:'-1'  }}></div>
                 <Stack gap={2} direction="vertical" className='p-3' style={{ width: '100%' }} >
                     <div className="p-2">
-                        {/* <img src={Logo} alt='logo' className='mx-auto' height={60} style={{ display:'block' }}  /> */}
                         <h3 className='text-center fw-bold fs-1 text-danger'>Login</h3>
                     </div>
                     <div className="p-2 position-relative">
