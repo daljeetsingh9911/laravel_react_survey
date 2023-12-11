@@ -2,10 +2,25 @@ import * as Yup from 'yup';
 
 export const LoginValidation = Yup.object({
         password: Yup.string()
-                .min(5, 'Must be more than 5 characters or more')
+                .min(5, 'Must be more than 5 characters')
                 .required('The password is required'),
         email: Yup.string().email('Invalid email address').required('Email address is required'),
 })
+
+
+export const RegistrarionValidation = Yup.object({
+  password: Yup.string()
+          .min(5, 'Must be more than 5 characters')
+          .required('The password is required'),
+  email: Yup.string().email('Invalid email address').required('Email address is required'),
+  fullName: Yup.string()
+          .required('Name of the user is required')
+          .min(5, 'Name Must be 5 characters or more'),
+  confirmPassword: Yup.string()
+    .required('The Confirm password field is required')
+    .oneOf([Yup.ref('password')], 'Password must match')
+})
+
 
 
 
