@@ -2,7 +2,7 @@
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { Button, Stack } from 'react-bootstrap';
+import { Button, Spinner, Stack } from 'react-bootstrap';
 import { ErrorMessage, Formik } from 'formik';
 import { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -25,13 +25,14 @@ const Login = () => {
         <Formik
             initialValues={LoginFormInitValues}
             validationSchema={LoginValidation}
-            onSubmit={(values) => {
+            onSubmit={(values,{setSubmitting}) => {
                 console.log(values);
                 contextData.updateUserToken('fsdf');
                 navigate('/dashboard/home');
+                setSubmitting(false); 
             }}
         >
-            {({ handleChange, handleBlur, handleSubmit, values }) => (
+            {({ handleChange, handleBlur, handleSubmit, values,isSubmitting }) => (
                 <form onSubmit={handleSubmit} style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'bottom' }} className='px-3'>
                     <div className='shadow-lg rounded-4 position-relative overflow-hidden' style={{ width: '500px', zIndex: '2' }} >
                         <div className='position-absolute top-0 start-0 end-0 bottom-0' style={{ backgroundColor: '#39bee79e', zIndex: '-1' }}></div>
@@ -75,8 +76,8 @@ const Login = () => {
 
                             </Row>
                             <div className="p-2 text-center">
-                                <Button type='submit' variant='danger' className='w-full p-2 fs-5' >
-                                    Login
+                                <Button  type='submit' variant='danger' className='w-full p-2 fs-5' disabled={isSubmitting?true:false} >
+                                    Submit  {isSubmitting&&(<Spinner animation="border" size='sm' />)}
                                 </Button>
                             </div>
                             <div className="p-2 text-center">
