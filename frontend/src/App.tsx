@@ -1,7 +1,6 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
-import { MyContext, MyContextProps } from "./context/surveyContext";
 import AuthLayout from "./layouts/auth";
 import { CreateSurvey, Home, Login,Registration,Surveys } from "./pages";
 
@@ -9,20 +8,16 @@ import DashboardLayout from "./layouts/dashboard";
 
 
 const  App = () => {
-  const {userToken,updateUserToken} =  useContext<MyContextProps>(MyContext);
+   
   let navigate = useNavigate();
 
   useEffect(() => {
       let localToken =  localStorage.getItem("userToken");
       
-      if(!localToken){
+      if(!localToken || window.location.pathname == '/'){
           navigate('/login');
       }
       
-      if(localToken && !userToken){
-         updateUserToken(localToken);
-      }
-
   }, []);
     
   return (
