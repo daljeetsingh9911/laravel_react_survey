@@ -3,35 +3,38 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { MyContext, MyContextProps } from "./surveyContext";
 import AuthLayout from "./layouts/auth";
-import { Home, Login } from "./pages";
+import { Home, Login,Surveys } from "./pages";
+
 import DashboardLayout from "./layouts/dashboard";
 
 
 const  App = () => {
-  const {userToken} =  useContext<MyContextProps>(MyContext);
+  const {userToken,updateUserToken} =  useContext<MyContextProps>(MyContext);
   let navigate = useNavigate();
 
   useEffect(() => {
-      if(!userToken){
+      let localToken =  localStorage.getItem("userToken");
+      
+      if(!localToken){
           navigate('/login');
+      }
+      
+      if(localToken && !userToken){
+         updateUserToken(localToken);
       }
 
   }, []);
     
   return (
    <div>
-      <Routes >
-         <Route  path="/" element={<AuthLayout/>}>
-            <Route 
-              path="login" element={<Login/>}
-              />
+      <Routes>
+         <Route path="/" element={<AuthLayout/>}>
+            <Route path="login" element={<Login />} />
          </Route>
-         <Route  path="dashbord" element={<DashboardLayout/>}>
-            <Route 
-              path="home" element={<Home/>}
-              />
+         <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route path="home" element={<Home />} />
+            <Route path="surveys" element={<Surveys />} />
          </Route>
-         
       </Routes>
    </div>
   )

@@ -2,17 +2,25 @@
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import bg from '../../assets/bg.jpg';
 import { Button, Stack } from 'react-bootstrap';
-
 import { ErrorMessage, Formik } from 'formik';
 import * as Yup from 'yup';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import bg from '../../assets/bg.jpg';
+import { MyContext, MyContextProps } from '../../surveyContext';
 
 const Login = () => {
-    
-   useEffect(() => {
 
+   const contextData  = useContext<MyContextProps>(MyContext);
+   const navigate = useNavigate();
+
+   useEffect(() => {
+       let localToken =  localStorage.getItem('userToken');
+        if(localToken){
+            navigate('/dashboard/home');
+        }
     }, []);
 
     return (
@@ -27,6 +35,8 @@ const Login = () => {
       })}
        onSubmit={(values) => {
          console.log(values);
+         contextData.updateUserToken('fsdf');
+         navigate('/dashboard/home');
        }}
      >
        {({handleChange, handleBlur, handleSubmit,values }) => (
