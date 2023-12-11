@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { HTMLAttributes, ReactNode } from "react"
 
 export interface SingleSurvey {
     id: number
@@ -6,7 +6,7 @@ export interface SingleSurvey {
     title: string
     slug: string
     status: boolean
-    description: string
+    description:any
     created_at: string
     updated_at: string
     expire_date: string

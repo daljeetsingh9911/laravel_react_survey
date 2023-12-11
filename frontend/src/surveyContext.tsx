@@ -53,10 +53,10 @@ const SurveyContextProvider: React.FC<MyContextProviderProps> = ({ children }) =
     let userTokenLocalStorage = localStorage.getItem('userToken');
 
     if(surveysLocalStorage){
-      setMyValue(surveysLocalStorage);
+      setMyValue(JSON.parse(surveysLocalStorage));
     }
     if(userTokenLocalStorage){
-      setUserToken(userTokenLocalStorage);
+      setUserToken(JSON.parse(userTokenLocalStorage));
     }
   }, []);
 
