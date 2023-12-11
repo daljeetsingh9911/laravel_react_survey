@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
-import { SingleSurvey } from './Types';
+import { SingleSurvey } from '../utils/Types';
 
-import data from './data.json';
+import data from '../data.json';
 
 export interface MyContextProps {
   surveys: SingleSurvey[];

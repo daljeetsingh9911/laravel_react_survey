@@ -24,3 +24,11 @@ export interface SingleSurvey {
   export interface appComponentProps {
     children:ReactNode
   }
+
+  export interface CreateSurveyForm {
+    image_url:string,
+    title:string,
+    status: Boolean,
+    description: any,
+    expire_date: string
+  }

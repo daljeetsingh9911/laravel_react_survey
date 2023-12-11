@@ -1,6 +1,6 @@
 import { Col } from "react-bootstrap";
 
-import { SingleSurvey } from "../../Types";
+import { SingleSurvey } from "../../utils/Types";
 import imgBg from '../../assets/bg2.jpg';
 
 interface SurveyItemProps {
@@ -17,7 +17,7 @@ const SurveyItem = (props: SurveyItemProps) => {
     }
 
     return (
-        <Col xs={12} sm={6} lg={3}>
+        <Col xs={12} sm={6} lg={3} >
             <div className="card">
                 <img src={imgBg} className="card-img-top" alt={title} />
                 <div className="card-body">
@@ -30,13 +30,14 @@ const SurveyItem = (props: SurveyItemProps) => {
                         <span role="button" >
                             <i className="bi bi-pencil-square"></i>
                         </span>
-                        <span onClick={deleteIteam} role="button" >
-                            <i className="bi bi-trash3"></i>
-                        </span>
 
                         <a href={slug} target="_blank">
                             <i className="bi bi-box-arrow-up-right"></i>
                         </a>
+
+                        <span onClick={deleteIteam} role="button" >
+                            <i className="bi bi-trash3 text-danger"></i>
+                        </span>
                     </div>
 
                 </div>

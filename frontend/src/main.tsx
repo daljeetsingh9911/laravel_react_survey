@@ -6,7 +6,7 @@ import './index.css'
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { SurveyContextProvider } from './surveyContext.tsx'
+import { SurveyContextProvider } from './context/surveyContext.tsx'
 import App from './App.tsx'
 
 
