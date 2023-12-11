@@ -27,3 +27,16 @@ body {
 .w-full{
   width: 100%;
 }
+.h-full{
+  height: 100%;
+}
+.h-full-vh{
+  height: 100vh;
+}
+.overflow-y{
+  overflow-y: scroll;
+}
+.navbar-nav .active {
+  font-weight: 500;
+  color: #5699ff !important;
+}

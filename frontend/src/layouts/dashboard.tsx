@@ -4,7 +4,7 @@ import ResponsiveAppBar from "../components/header";
 const DashboardLayout = () => {
 
     return(
-        <div  >
+        <div className="h-full-vh w-full overflow-y " >
             <ResponsiveAppBar/>
             <Outlet/>
         </div>
