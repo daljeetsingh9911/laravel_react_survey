@@ -6,7 +6,7 @@ const axiosClient: AxiosInstance = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = 'Token ';
+    const token = localStorage.getItem('userToken');
     config.headers.Authorization = `Basic ${token}`;
     return config;
   },

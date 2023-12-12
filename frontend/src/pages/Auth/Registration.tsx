@@ -2,41 +2,41 @@
 import Form from 'react-bootstrap/Form';
 import { Button, Spinner, Stack } from 'react-bootstrap';
 import { ErrorMessage, Formik } from 'formik';
-import { useContext, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import bg from '../../assets/bg.jpg';
 import { RegistrarionValidation } from '../../utils/ValidationObject';
 import { RegistrationFormInitValues } from '../../utils/initValues';
 import axiosClient from '../../utils/axiosClient';
 import { MyContext } from '../../context/surveyContext';
+import { ShowErrorMessage, ShowSuceessMessage, Toast } from '../../utils/SweetAlert';
 
 const Registration = () => {
 
     const {updateUserToken} = useContext(MyContext);
 
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        let localToken = localStorage.getItem('userToken');
-        if (localToken) {
-            navigate('/dashboard/home');
-        }
-    }, []);
 
     return (
         <Formik
             initialValues={RegistrationFormInitValues}
             validationSchema={RegistrarionValidation}
             onSubmit={(values,{setSubmitting}) => {
-               axiosClient.post('/registration', values).then((response) => {
+               axiosClient.post('/registration',values).then((response) => {
                 if(response.data) {
                     updateUserToken(response.data.token);
+                    ShowSuceessMessage('User has been registered successfully','Success')
                 }
                }).catch((err) => {
-                console.log({err});
+                if(err.response?.data?.errors){
+                    const errorMessages = Object.values(err.response.data.errors)
+                                .flat()
+                                .map((error) => `${error}`)
+                                .join('\n');
+                    ShowErrorMessage(errorMessages,'Validation Error')
+                }
                }).finally(() => {setSubmitting(false)});
-               
+
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values,isSubmitting }) => (

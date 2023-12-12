@@ -2,10 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import './index.css'
-
-
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import './index.css'
 import { SurveyContextProvider } from './context/surveyContext.tsx'
 import App from './App.tsx'
 

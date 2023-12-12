@@ -3,38 +3,53 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { Button, Spinner, Stack } from 'react-bootstrap';
-import { ErrorMessage, Formik } from 'formik';
+import { ErrorMessage, Formik, FormikHelpers, FormikValues } from 'formik';
 import { useContext, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import bg from '../../assets/bg.jpg';
 import { MyContext, MyContextProps } from '../../context/surveyContext';
 import { LoginValidation } from '../../utils/ValidationObject';
 import { LoginFormInitValues } from '../../utils/initValues';
 import axiosClient from '../../utils/axiosClient';
+import {ShowErrorMessage, ShowSuceessMessage} from '../../utils/SweetAlert';
 
 const Login = () => {
 
     const {updateUserToken} = useContext<MyContextProps>(MyContext);
-    const navigate = useNavigate();
-
     useEffect(() => {
         
     }, []);
+
+    const handleSubmition = (values:FormikValues,{setSubmitting}:FormikHelpers<any>) =>{
+        
+            axiosClient.post('/login', values).then((response) => {
+               if(response?.data){
+                updateUserToken(response.data.token);
+                ShowSuceessMessage('User has been registered successfully','Success');
+               }
+            }).catch((err) => {
+                let errorInfo = err.response?.data;
+                if(errorInfo?.errors){
+                    const errorMessages = Object.values(err.response.data.errors)
+                                .flat()
+                                .map((error) => `${error}`)
+                                .join('\n');
+                    ShowErrorMessage(errorMessages,'Validation Error')
+                }
+
+                if(err.response.status ===400){
+                    ShowErrorMessage(errorInfo.error,'Authentication Error')
+                }
+
+            }).finally(() => {setSubmitting(false)});
+    }
 
     return (
         <Formik
             initialValues={LoginFormInitValues}
             validationSchema={LoginValidation}
-            onSubmit={(values,{setSubmitting}) => {
-                axiosClient.post('/login', values).then((response) => {
-                   if(response?.data){
-                    updateUserToken(response.data.token);
-                   }
-                }).catch((err) => {
-                console.log({err});
-                }).finally(() => {setSubmitting(false)});
-            }}
+            onSubmit={handleSubmition}
         >
             {({ handleChange, handleBlur, handleSubmit, values,isSubmitting }) => (
                 <form onSubmit={handleSubmit} style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundImage: `url(${bg})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'bottom' }} className='px-3'>

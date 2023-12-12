@@ -37,7 +37,7 @@ class Authentication extends Controller
         if(!Auth::attempt($credentials, $rememberMe)){
             return response([
                 'error' =>'incorrect credentials'
-            ],403);
+            ],400);
         }
 
         /** @var \App\Models\User */
