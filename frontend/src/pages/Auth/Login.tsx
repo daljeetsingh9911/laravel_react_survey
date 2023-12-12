@@ -11,10 +11,11 @@ import bg from '../../assets/bg.jpg';
 import { MyContext, MyContextProps } from '../../context/surveyContext';
 import { LoginValidation } from '../../utils/ValidationObject';
 import { LoginFormInitValues } from '../../utils/initValues';
+import axiosClient from '../../utils/axiosClient';
 
 const Login = () => {
 
-    const contextData = useContext<MyContextProps>(MyContext);
+    const {updateUserToken} = useContext<MyContextProps>(MyContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,10 +27,13 @@ const Login = () => {
             initialValues={LoginFormInitValues}
             validationSchema={LoginValidation}
             onSubmit={(values,{setSubmitting}) => {
-                console.log(values);
-                contextData.updateUserToken('fsdf');
-                navigate('/dashboard/home');
-                setSubmitting(false); 
+                axiosClient.post('/login', values).then((response) => {
+                   if(response?.data){
+                    updateUserToken(response.data.token);
+                   }
+                }).catch((err) => {
+                console.log({err});
+                }).finally(() => {setSubmitting(false)});
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values,isSubmitting }) => (

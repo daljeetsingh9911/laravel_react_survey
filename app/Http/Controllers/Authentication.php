@@ -15,7 +15,7 @@ class Authentication extends Controller
 
         /** @var \App\Models\User */
         $user = User::create([
-            "name"=>$data["name"],
+            "name"=>$data["fullName"],
             "email"=> $data["email"],
             "password"=> bcrypt($data["password"]),
         ]);
@@ -37,7 +37,7 @@ class Authentication extends Controller
         if(!Auth::attempt($credentials, $rememberMe)){
             return response([
                 'error' =>'incorrect credentials'
-            ],442);
+            ],403);
         }
 
         /** @var \App\Models\User */

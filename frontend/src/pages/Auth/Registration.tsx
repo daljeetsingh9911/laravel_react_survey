@@ -2,14 +2,18 @@
 import Form from 'react-bootstrap/Form';
 import { Button, Spinner, Stack } from 'react-bootstrap';
 import { ErrorMessage, Formik } from 'formik';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import bg from '../../assets/bg.jpg';
 import { RegistrarionValidation } from '../../utils/ValidationObject';
 import { RegistrationFormInitValues } from '../../utils/initValues';
+import axiosClient from '../../utils/axiosClient';
+import { MyContext } from '../../context/surveyContext';
 
 const Registration = () => {
+
+    const {updateUserToken} = useContext(MyContext);
 
     const navigate = useNavigate();
 
@@ -25,10 +29,14 @@ const Registration = () => {
             initialValues={RegistrationFormInitValues}
             validationSchema={RegistrarionValidation}
             onSubmit={(values,{setSubmitting}) => {
-               console.log(values);
-               setTimeout(()=>{
-                setSubmitting(false);
-               },3000)
+               axiosClient.post('/registration', values).then((response) => {
+                if(response.data) {
+                    updateUserToken(response.data.token);
+                }
+               }).catch((err) => {
+                console.log({err});
+               }).finally(() => {setSubmitting(false)});
+               
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values,isSubmitting }) => (
