@@ -31,11 +31,12 @@ interface MyContextProviderProps {
 export const removeLocalStorageData = () => {
   localStorage.removeItem('surveys');
   localStorage.removeItem('userToken');
+  window.location.href = `${window.location.origin}/login`;
 }
 
 const SurveyContextProvider: React.FC<MyContextProviderProps> = ({ children }) => {
   const [surveys, setMyValue] = useState<SingleSurvey[]| any>(data as SingleSurvey[]);
-  const [userToken, setUserToken] = useState<String | undefined>(undefined);
+  const [userToken, setUserToken] = useState<String | any>(undefined);
 
   // Storing data into local storage
   useEffect(() => {
@@ -44,7 +45,7 @@ const SurveyContextProvider: React.FC<MyContextProviderProps> = ({ children }) =
       }
 
       if(userToken){
-        localStorage.setItem('userToken',JSON.stringify(userToken));
+        localStorage.setItem('userToken',userToken);
       }
   }, [userToken,surveys]);
 

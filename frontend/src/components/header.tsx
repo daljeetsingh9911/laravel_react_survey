@@ -20,10 +20,10 @@ const ResponsiveAppBar = () => {
   const logout = () =>{
     axiosClient.post('logout').then((resp)=>{
       if(resp.data.success){
-        removeLocalStorageData();
+         removeLocalStorageData();
       }
     }).catch((err) =>{
-      removeLocalStorageData();
+        removeLocalStorageData();
     })
   }
 

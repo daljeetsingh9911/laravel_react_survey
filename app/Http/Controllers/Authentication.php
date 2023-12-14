@@ -52,17 +52,29 @@ class Authentication extends Controller
         
     }
 
-    public function logout(Request $request){
-        
-        /** @var User $user*/
-        $user = Auth::user();
+    public function logout(Request $request)
+    {
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // Get the authenticated user
+            $user = Auth::user();
 
-        // revoke the token
+             // Revoke the user's access tokens
+            $user->tokens->each(function ($token, $key) {
+                $token->delete();
+            });
 
-        $user->currentAccessToken->delete();
-        
+            return response([
+                'success' => true,
+                'message' => 'Logout successful',
+            ]);
+            
+        }
+
+        // Handle case where there is no authenticated user
         return response([
-            'success' => true
-        ]);
+            'success' => false,
+            'message' => 'User not authenticated',
+        ], 401);
     }
 }

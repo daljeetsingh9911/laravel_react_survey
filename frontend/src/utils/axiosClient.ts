@@ -7,10 +7,9 @@ const axiosClient: AxiosInstance = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-    let token:string | null = localStorage.getItem('userToken'); 
-        token = token? JSON.parse(token):'';
-        
-    config.headers.Authorization = `Basic ${token}`;
+    let token:string | null = localStorage.getItem('userToken');
+      
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
 );
@@ -22,7 +21,6 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       removeLocalStorageData();
-      window.location.href = `${window.location.origin}/login`;
       return Promise.reject(error);
     }
     return Promise.reject(error);
