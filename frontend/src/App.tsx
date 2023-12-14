@@ -27,7 +27,7 @@ const  App = () => {
 
   const checkTokenAndredirectUser =()=> {
    if(userToken || localToken){
-      navigate('/dashboard');
+      navigate(window.location.pathname);
    }
   } 
 
