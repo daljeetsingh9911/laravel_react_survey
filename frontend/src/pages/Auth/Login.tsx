@@ -17,6 +17,7 @@ import {ShowErrorMessage, ShowSuceessMessage} from '../../utils/SweetAlert';
 const Login = () => {
 
     const {updateUserToken} = useContext<MyContextProps>(MyContext);
+
     useEffect(() => {
         
     }, []);
@@ -26,7 +27,7 @@ const Login = () => {
             axiosClient.post('/login', values).then((response) => {
                if(response?.data){
                 updateUserToken(response.data.token);
-                ShowSuceessMessage('User has been registered successfully','Success');
+                ShowSuceessMessage(`Welcome ${response.data?.user.name}`,'Success');
                }
             }).catch((err) => {
                 let errorInfo = err.response?.data;
@@ -38,7 +39,7 @@ const Login = () => {
                     ShowErrorMessage(errorMessages,'Validation Error')
                 }
 
-                if(err.response.status ===400){
+                if(err.response?.status == 400){
                     ShowErrorMessage(errorInfo.error,'Authentication Error')
                 }
 

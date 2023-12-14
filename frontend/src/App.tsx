@@ -18,6 +18,7 @@ const  App = () => {
       if(!localToken || window.location.pathname == '/'){
           navigate('/login');
       }
+      checkTokenAndredirectUser();
   },[]);
 
   // use effect for redirect user get logged in
@@ -27,7 +28,12 @@ const  App = () => {
 
   const checkTokenAndredirectUser =()=> {
    if(userToken || localToken){
-      navigate(window.location.pathname);
+      if(window.location.pathname == '/login'){
+         navigate('/dashboard/home');
+      }else{
+         navigate(window.location.pathname);
+
+      }
    }
   } 
 
