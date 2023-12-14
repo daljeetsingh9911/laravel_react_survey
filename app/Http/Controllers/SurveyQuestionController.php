@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSurveyRequest;
-use App\Http\Requests\UpdateSurveyRequest;
-use App\Models\Survey;
+use App\Models\SurveyQuestion;
+use Illuminate\Http\Request;
 
-class SurveyController extends Controller
+class SurveyQuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +26,7 @@ class SurveyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSurveyRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +34,7 @@ class SurveyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Survey $survey)
+    public function show(SurveyQuestion $surveyQuestion)
     {
         //
     }
@@ -43,7 +42,7 @@ class SurveyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Survey $survey)
+    public function edit(SurveyQuestion $surveyQuestion)
     {
         //
     }
@@ -51,7 +50,7 @@ class SurveyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSurveyRequest $request, Survey $survey)
+    public function update(Request $request, SurveyQuestion $surveyQuestion)
     {
         //
     }
@@ -59,7 +58,7 @@ class SurveyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Survey $survey)
+    public function destroy(SurveyQuestion $surveyQuestion)
     {
         //
     }
