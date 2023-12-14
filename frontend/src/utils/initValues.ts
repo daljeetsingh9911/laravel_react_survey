@@ -9,5 +9,10 @@ export const CrateSurveyinitialValues:CreateSurveyForm = {
     title: "",
     status: false,
     description: undefined,
-    expire_date: ""
+    expire_date: "",
+    questions: []
 };
+
+export const InputFieldTypes:string[] =['text','textarea','radio','checkbox','select'];
+
+export const showOptionIf:string[] = ['radio','checkbox','select'];

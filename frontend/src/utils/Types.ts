@@ -18,7 +18,7 @@ export interface SingleSurvey {
     type: string
     question: string
     description?: string
-    data: any
+    data: any[]
   }
   
   export interface appComponentProps {
@@ -30,5 +30,6 @@ export interface SingleSurvey {
     title:string,
     status: Boolean,
     description: any,
-    expire_date: string
+    expire_date: string,
+    questions: Question[]
   }
