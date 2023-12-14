@@ -8,7 +8,6 @@ export interface MyContextProps {
   updateValue: (newValue: SingleSurvey) => void;
   userToken: String | undefined;
   updateUserToken: (Token: String) => void;
-  removeLocalStorageData: () =>void;
 }
 
 const initialValues:MyContextProps = {
@@ -19,9 +18,6 @@ const initialValues:MyContextProps = {
   userToken: undefined,
   updateUserToken: function (Token: String): void {
     throw new Error('Function not implemented.');
-  },
-  removeLocalStorageData: function (): void {
-    throw new Error('Function not implemented.');
   }
 }
 
@@ -29,6 +25,12 @@ const MyContext = createContext<MyContextProps>(initialValues);
 
 interface MyContextProviderProps {
   children: ReactNode;
+}
+
+
+export const removeLocalStorageData = () => {
+  localStorage.removeItem('surveys');
+  localStorage.removeItem('userToken');
 }
 
 const SurveyContextProvider: React.FC<MyContextProviderProps> = ({ children }) => {
@@ -61,11 +63,6 @@ const SurveyContextProvider: React.FC<MyContextProviderProps> = ({ children }) =
   }, []);
 
 
-  const removeLocalStorageData = () => {
-      localStorage.removeItem('surveys');
-      localStorage.removeItem('userToken');
-  }
-
   const updateValue = (newValue:SingleSurvey) => {
     setMyValue((prev: any)=>[...prev, newValue]);
   };
@@ -78,8 +75,7 @@ const SurveyContextProvider: React.FC<MyContextProviderProps> = ({ children }) =
     surveys,
     updateValue,
     userToken,
-    updateUserToken,
-    removeLocalStorageData
+    updateUserToken
   };
 
   return (
