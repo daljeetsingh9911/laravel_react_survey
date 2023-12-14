@@ -16,7 +16,7 @@ export const RegistrarionValidation = Yup.object({
   fullName: Yup.string()
           .required('Name of the user is required')
           .min(5, 'Name Must be 5 characters or more'),
-  confirmPassword: Yup.string()
+  confirmed: Yup.string()
     .required('The Confirm password field is required')
     .oneOf([Yup.ref('password')], 'Password must match')
 })

@@ -23,13 +23,11 @@ class RegistrationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "fullName" => "required",
+            "fullName" => "required|string",
             "email" => "required|email|string|unique:users,email",
-            "password"=>[
-                "required",
-                "confirmPassword",
-                Password::min(5)->mixedCase()
-            ],
+            "password" => "required|min:5",
+            "confirmed" => 'required|same:password'
         ];
+        
     }
 }

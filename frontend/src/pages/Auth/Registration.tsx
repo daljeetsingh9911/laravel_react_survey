@@ -10,7 +10,7 @@ import { RegistrarionValidation } from '../../utils/ValidationObject';
 import { RegistrationFormInitValues } from '../../utils/initValues';
 import axiosClient from '../../utils/axiosClient';
 import { MyContext } from '../../context/surveyContext';
-import { ShowErrorMessage, ShowSuceessMessage, Toast } from '../../utils/SweetAlert';
+import { ShowErrorMessage, ShowSuceessMessage } from '../../utils/SweetAlert';
 
 const Registration = () => {
 
@@ -75,12 +75,12 @@ const Registration = () => {
                             </div>
 
                             <div className="p-2 position-relative">
-                                <Form.Control type="password" name='confirmPassword' placeholder="Confirm Password" className='py-3'
+                                <Form.Control type="password" name='confirmed' placeholder="Confirm Password" className='py-3'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.confirmPassword}
+                                    value={values.confirmed}
                                 />
-                                <ErrorMessage name="confirmPassword" >{msg => <div className='text-danger pt-2 fw-bolder'>{msg}</div>}</ErrorMessage>
+                                <ErrorMessage name="confirmed" >{msg => <div className='text-danger pt-2 fw-bolder'>{msg}</div>}</ErrorMessage>
                             </div>
                            
                            
