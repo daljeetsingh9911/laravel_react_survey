@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { ErrorMessage, Field, FieldArray, Formik } from "formik";
-import { Badge, Button, Stack } from "react-bootstrap";
+import { ErrorMessage, Field, FieldArray, Formik, FormikHelpers, FormikValues } from "formik";
+import { Badge, Button, Spinner, Stack } from "react-bootstrap";
 
 
 import { CreateSurveyForm, Question } from "../../utils/Types";
@@ -22,8 +22,9 @@ const CreateSurvey = () => {
         };
     }, []);
 
-    const handleSubmit = (values: CreateSurveyForm) => {
+    const handleSubmit = (values:FormikValues,{setSubmitting}:FormikHelpers<any>)  => {
         console.log(values);
+        setSubmitting(false);
     }
 
     return (
@@ -36,7 +37,7 @@ const CreateSurvey = () => {
                     validationSchema={CreateSurveyValidation}
                     onSubmit={handleSubmit}
                 >
-                    {({ values, handleChange, handleSubmit, handleBlur }) => {
+                    {({ values, handleChange, handleSubmit, handleBlur,isSubmitting }) => {
                         return (
                             <form action="" onSubmit={handleSubmit}>
                                 <Stack gap={4}>
@@ -55,12 +56,13 @@ const CreateSurvey = () => {
 
                                     </div>
                                     <div >
-                                        <textarea name="description" placeholder="Description" className="form-control"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                        >
-                                            {values.description}
-                                        </textarea>
+                                        <Field
+                                            name="description"
+                                            placeholder="Description"
+                                            className="form-control"
+                                            as="textarea"
+                                            value={values.description}
+                                        />
                                         <ErrorMessage name="description" >{msg => <div className='text-danger pt-2 fw-bolder'>{msg}</div>}</ErrorMessage>
 
                                     </div>
@@ -86,15 +88,16 @@ const CreateSurvey = () => {
                                                         type="button"
                                                         className="btn btn-secondary float-end"
                                                         onClick={() => push({
-                                                            type: '', question: '', description: '', data: []
+                                                            type: 'text', question: '', description: '', data: []
                                                         })}
                                                     >
                                                         Add Question
                                                     </button>
                                                     <hr />
+                                                    <ErrorMessage name="questions" />
                                                 </div>
                                                 <Stack gap={3} >
-                                                    {values.questions.length > 0 && values.questions.map((quesion: Question, index) => (
+                                                    {values.questions.length > 0 && values.questions.map((ques: Question, index) => (
                                                         <div key={`optionsParent_${index}`} className="shadow-sm border rounded-2 px-2 py-3">
                                                             <div className="flex align-items-center justify-content-between ">
 
@@ -107,7 +110,7 @@ const CreateSurvey = () => {
                                                                                 name={`questions.${index}.question`}
                                                                                 placeholder={`Enter Question ${index + 1}`}
                                                                                 className="form-control"
-                                                                                value={quesion.question}
+                                                                                value={ques.question}
                                                                             />
                                                                             <ErrorMessage
                                                                                 name={`questions.${index}.question`}
@@ -118,7 +121,7 @@ const CreateSurvey = () => {
                                                                         </div>
                                                                         <div className="type-inp">
                                                                             <Field as='select' className="form-control" name={`questions.${index}.type`}
-                                                                                value={quesion.type}
+                                                                                value={ques.type}
                                                                             >
                                                                                 {InputFieldTypes.map((inp, Fieldindex) => (
                                                                                     <option value={inp} key={`feildtype_${index}_${Fieldindex}`}>{inp.toUpperCase()}</option>
@@ -133,7 +136,7 @@ const CreateSurvey = () => {
                                                                             placeholder="Enter description"
                                                                             as="textarea"
                                                                             className="form-control"
-                                                                            value={quesion.description}
+                                                                            value={ques.description}
                                                                         />
                                                                         <ErrorMessage
                                                                             name={`questions.${index}.description`}
@@ -148,7 +151,7 @@ const CreateSurvey = () => {
                                                                     type="button"
                                                                     className="btn btn-danger size-xs" onClick={() => {
                                                                         insert(index+1,{
-                                                                            type: '', question: '', description: '', data: []
+                                                                            type: 'text', question: '', description: '', data: []
                                                                         });
                                                                     }}>
                                                                     <i className="bi bi-plus-square"></i>
@@ -165,7 +168,7 @@ const CreateSurvey = () => {
                                                                 </div>
                                                             </div>
                                                             {/* Starting with add options for data */}
-                                                            {showOptionIf.includes(quesion.type) && (
+                                                            {showOptionIf.includes(ques.type) && (
                                                                 <div className="mt-5 border border-1 p-2 rounded-1">
                                                                     <FieldArray name={`questions[${index}].data`}
                                                                     >
@@ -179,12 +182,12 @@ const CreateSurvey = () => {
                                                                                     </button>
                                                                                 </div>
                                                                                 <Stack gap={3}>
-                                                                                    {quesion.data.length > 0 && quesion.data.map((data, dataindex) => {
+                                                                                    {ques.data.length > 0 && ques.data.map((data, dataindex) => {
                                                                                         return (
                                                                                             <div className="border border-b-1 flex justify-content-between p-2" key={`questions_inner_data_${dataindex}`}>
                                                                                                 <div className="flex-fill align-items-center" >
                                                                                                     <div className="flex align-items-center" >
-                                                                                                    <Badge bg="warning">{quesion.type.toUpperCase()} {dataindex + 1}</Badge>
+                                                                                                    <Badge bg="warning">{ques.type.toUpperCase()} {dataindex + 1}</Badge>
                                                                                                         <Field
                                                                                                             text='text'
                                                                                                             className="form-control"
@@ -235,8 +238,10 @@ const CreateSurvey = () => {
                                 </Stack>
 
                                 <div className="text-center mt-5">
-                                    <Button type="submit" variant="primary">
-                                        Submit
+                                    <Button type="submit" variant="primary"
+                                     disabled={isSubmitting?true:false}
+                                    >
+                                        Submit {isSubmitting&&<Spinner size="sm" />}   
                                     </Button>
                                 </div>
                             </form>

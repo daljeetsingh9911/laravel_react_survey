@@ -17,8 +17,8 @@ export interface SingleSurvey {
     id: number
     type: string
     question: string
-    description?: string
-    data: any[]
+    description: string
+    data: string[]
   }
   
   export interface appComponentProps {
