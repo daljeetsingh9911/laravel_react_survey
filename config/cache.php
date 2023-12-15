@@ -34,7 +34,7 @@ return [
     'stores' => [
 
         'apc' => [
-            'driver' => 'apc',
+            'driver' => null//'apc',
         ],
 
         'array' => [

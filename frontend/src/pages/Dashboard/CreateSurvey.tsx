@@ -7,6 +7,7 @@ import { CreateSurveyForm, Question } from "../../utils/Types";
 import { CrateSurveyinitialValues, InputFieldTypes, showOptionIf } from "../../utils/initValues";
 import { CreateSurveyValidation } from "../../utils/ValidationObject";
 import { previewPhoto } from "../../utils/untils";
+import axiosClient from "../../utils/axiosClient";
 
 
 
@@ -23,8 +24,16 @@ const CreateSurvey = () => {
     }, []);
 
     const handleSubmit = (values:FormikValues,{setSubmitting}:FormikHelpers<any>)  => {
-        console.log(values);
+       
         setSubmitting(false);
+
+        axiosClient.post('/survey/create', values).then((resp)=>{
+            console.log(resp);
+            
+        }).catch((err) => {
+            console.log(err);
+            
+        }).finally(()=>setSubmitting(false));
     }
 
     return (

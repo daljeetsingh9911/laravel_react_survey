@@ -17,19 +17,13 @@ class SurveyController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreSurveyRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        return response($data);
     }
 
     /**
@@ -37,17 +31,10 @@ class SurveyController extends Controller
      */
     public function show(Survey $survey)
     {
-        //
+        return  Survey::all();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Survey $survey)
-    {
-        //
-    }
-
+   
     /**
      * Update the specified resource in storage.
      */

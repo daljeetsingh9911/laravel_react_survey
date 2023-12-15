@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Authentication;
+use App\Http\Controllers\SurveyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
     Route::post('/logout', [Authentication::class,'logout'])->name('Logout');
+    Route::post('/survey/create', [SurveyController::class,'store']);
+    Route::post('/survey/update', [SurveyController::class,'put']);
 });
 
 
