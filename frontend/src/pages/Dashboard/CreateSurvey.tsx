@@ -3,7 +3,7 @@ import { ErrorMessage, Field, FieldArray, Formik, FormikHelpers, FormikValues } 
 import { Badge, Button, Spinner, Stack } from "react-bootstrap";
 
 
-import { CreateSurveyForm, Question } from "../../utils/Types";
+import { Question } from "../../utils/Types";
 import { CrateSurveyinitialValues, InputFieldTypes, showOptionIf } from "../../utils/initValues";
 import { CreateSurveyValidation } from "../../utils/ValidationObject";
 import { previewPhoto } from "../../utils/untils";
@@ -23,17 +23,29 @@ const CreateSurvey = () => {
         };
     }, []);
 
+    const CutsomErrorMessage = ({name,errors,touched}:{name:string,errors:any,touched:any})=> {
+        let feildInfo:string[] = name?.split('.');
+        return(
+                <div  className='text-danger pt-2 fw-bolder'>
+                    {(errors[feildInfo[1]]?.[feildInfo[2]] && (touched[feildInfo[0]] && touched[feildInfo[0]][feildInfo[1]] &&  touched[feildInfo[0]][feildInfo[1]][feildInfo[2]]))&&(
+                        <div>{errors[feildInfo[1]]?.[feildInfo[2]]}</div>
+                    )}
+                </div>
+            )
+      };
+
     const handleSubmit = (values:FormikValues,{setSubmitting}:FormikHelpers<any>)  => {
-       
+        console.log(values);
+        
         setSubmitting(false);
 
-        axiosClient.post('/survey/create', values).then((resp)=>{
-            console.log(resp);
+        // axiosClient.post('/survey/create', values).then((resp)=>{
+        //     console.log(resp);
             
-        }).catch((err) => {
-            console.log(err);
+        // }).catch((err) => {
+        //     console.log(err);
             
-        }).finally(()=>setSubmitting(false));
+        // }).finally(()=>setSubmitting(false));
     }
 
     return (
@@ -46,9 +58,10 @@ const CreateSurvey = () => {
                     validationSchema={CreateSurveyValidation}
                     onSubmit={handleSubmit}
                 >
-                    {({ values, handleChange, handleSubmit, handleBlur,isSubmitting }) => {
-                        return (
+                    {({ values,errors,touched, handleChange, handleSubmit, handleBlur,isSubmitting }) => {
+                            return (
                             <form action="" onSubmit={handleSubmit}>
+                                
                                 <Stack gap={4}>
                                     <div>
                                         <div className="mb-3">
@@ -103,7 +116,7 @@ const CreateSurvey = () => {
                                                         Add Question
                                                     </button>
                                                     <hr />
-                                                    <ErrorMessage name="questions" />
+                                                    <ErrorMessage name="questions" >{msg => <div className='text-danger pt-2 fw-bolder'>{msg}</div>}</ErrorMessage>
                                                 </div>
                                                 <Stack gap={3} >
                                                     {values.questions.length > 0 && values.questions.map((ques: Question, index) => (
@@ -121,11 +134,10 @@ const CreateSurvey = () => {
                                                                                 className="form-control"
                                                                                 value={ques.question}
                                                                             />
-                                                                            <ErrorMessage
+                                                                            <CutsomErrorMessage
                                                                                 name={`questions.${index}.question`}
-                                                                                component="div"
-                                                                                className="field-error"
-
+                                                                                errors={errors}
+                                                                                touched={touched}
                                                                             />
                                                                         </div>
                                                                         <div className="type-inp">
@@ -147,10 +159,10 @@ const CreateSurvey = () => {
                                                                             className="form-control"
                                                                             value={ques.description}
                                                                         />
-                                                                        <ErrorMessage
+                                                                        <CutsomErrorMessage
                                                                             name={`questions.${index}.description`}
-                                                                            component="div"
-                                                                            className="field-error"
+                                                                            errors={errors}
+                                                                            touched={touched}
                                                                         />
                                                                     </div>
 
@@ -197,13 +209,22 @@ const CreateSurvey = () => {
                                                                                                 <div className="flex-fill align-items-center" >
                                                                                                     <div className="flex align-items-center" >
                                                                                                     <Badge bg="warning">{ques.type.toUpperCase()} {dataindex + 1}</Badge>
+                                                                                                    <div>
                                                                                                         <Field
                                                                                                             text='text'
                                                                                                             className="form-control"
                                                                                                             placeholder='Please insert option value'
-                                                                                                            name={`questions[${index}].data[${dataindex}]`}
+                                                                                                            name={`questions.${index}.data.${dataindex}`}
                                                                                                             value={data}
                                                                                                         />
+                                                                                                        <ErrorMessage  name={`questions.${index}.data.${dataindex}`}>{msg => <div className='text-danger pt-2 fw-bolder'>{msg}</div>}</ErrorMessage>
+                                                                                                        <CutsomErrorMessage
+                                                                                                            name={`questions.${index}.data`}
+                                                                                                            errors={errors}
+                                                                                                            touched={touched}
+                                                                                                        />
+                                                                                                    </div>
+                                                                                                        
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div className="flex">
@@ -243,7 +264,6 @@ const CreateSurvey = () => {
                                             </Stack>
                                         )}
                                     </FieldArray>
-
                                 </Stack>
 
                                 <div className="text-center mt-5">
