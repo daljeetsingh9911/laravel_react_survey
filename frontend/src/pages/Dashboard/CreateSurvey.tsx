@@ -39,13 +39,13 @@ const CreateSurvey = () => {
         
         setSubmitting(false);
 
-        // axiosClient.post('/survey/create', values).then((resp)=>{
-        //     console.log(resp);
+        axiosClient.post('/survey/create', values).then((resp)=>{
+            console.log(resp);
             
-        // }).catch((err) => {
-        //     console.log(err);
+        }).catch((err) => {
+            console.log(err);
             
-        // }).finally(()=>setSubmitting(false));
+        }).finally(()=>setSubmitting(false));
     }
 
     return (

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class SurveyQuestion extends Model
 {
     use HasFactory;
-    protected $fillable = ['type','question','description','survey_id'];
+    protected $fillable = ['type','question','description','survey_id','data'];
 
     public function survey():BelongsTo{
         return $this->belongsTo(Survey::class);

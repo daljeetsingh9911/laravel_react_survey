@@ -8,7 +8,6 @@ export const LoginValidation = Yup.object({
   email: Yup.string().email('Invalid email address').required('Email address is required'),
 })
 
-
 export const RegistrarionValidation = Yup.object({
   password: Yup.string()
     .min(5, 'Must be more than 5 characters')

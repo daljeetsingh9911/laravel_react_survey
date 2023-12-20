@@ -11,7 +11,7 @@ class Survey extends Model
 {
     use HasFactory;
 
-    protected $fillables = ['title','slug','description', 'user_id','expire_date'];
+    protected $fillable = ['image','title','slug','description', 'user_id','expire_date'];
 
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
