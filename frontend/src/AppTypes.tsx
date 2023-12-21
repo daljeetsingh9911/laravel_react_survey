@@ -2,7 +2,7 @@ export interface DashBoardResponseTypes {
   total: number
   surveys: Surveys
   total_answers: number
-  lastest_answers: LastestAnswers
+  lastest_answers: LastestAnswers[]
 }
 
 export interface Surveys {

@@ -80,27 +80,22 @@ const Home = () => {
                 </div>
                 <div className="col">
                     <Card className="h-full">
-                        <Card.Body className="border border-1 ">
+                        <Card.Body className="">
                             <Card.Title>
                                 Lastest Answers
                             </Card.Title>
-                            <ul className="list-group mt-4 overflow-scroll" style={{ maxHeight:300 }}>
-                                <li className="list-group-item">An item</li>
-                                <li className="list-group-item">A second item</li>
-                                <li className="list-group-item">A third item</li>
-                                <li className="list-group-item">A fourth item</li>
-                                <li className="list-group-item">And a fifth one</li>
-                                <li className="list-group-item">An item</li>
-                                <li className="list-group-item">A second item</li>
-                                <li className="list-group-item">A third item</li>
-                                <li className="list-group-item">A fourth item</li>
-                                <li className="list-group-item">And a fifth one</li>
-                                <li className="list-group-item">An item</li>
-                                <li className="list-group-item">A second item</li>
-                                <li className="list-group-item">A third item</li>
-                                <li className="list-group-item">A fourth item</li>
-                                <li className="list-group-item">And a fifth one</li>
-                            </ul>
+                            <div style={{ maxHeight:300 }}>
+                                {(dashboardData?.lastest_answers != undefined && dashboardData?.lastest_answers?.length > 0 )?(
+                                    <ul className="list-group mt-4 overflow-scroll" >
+                                        {dashboardData?.lastest_answers.map((answers)=>(
+                                                <li className="list-group-item">An item</li>
+                                            )
+                                        )}
+                                    </ul>
+                                ):(
+                                    <div className="h-full flex justify-content-center align-items-center border rounded-2"> No data found ☹️</div>
+                                )}
+                            </div>
                         </Card.Body>
                     </Card>
 

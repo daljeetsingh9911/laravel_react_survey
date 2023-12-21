@@ -19,8 +19,7 @@ class DashboardController extends Controller
                             ->where("surveys.user_id", $userID)->count();
         $lastest_answers =  SurveyAnswer::query()
                                 ->join("surveys", "survey_answers.survey_id","=","surveys.id" )
-                                ->where("surveys.user_id", $userID)
-                                ->orderBy('end_date', 'DESC');
+                                ->orderBy('end_date', 'DESC')->get();
         return  [
             "total"=>$total,
             "surveys"=>(new SurveyResource($surveys)),
