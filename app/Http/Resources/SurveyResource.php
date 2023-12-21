@@ -14,6 +14,18 @@ class SurveyResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'=> $this->id,
+            'title'=> $this->title,
+            'slug'=> $this->slug,
+            'status'=> $this->status,
+            'expire_date'=> date('d-M-Y',strtotime($this->expire_date)),
+            'created_at'=> date('d-M-Y',strtotime($this->created_at)),
+            'user_id'=> $this->user_id,
+            'image'=> $this->image,
+            'description'=> $this->description,
+            'questions'=> $this->question,
+            'total_answers'=> $this->surveryAnswer
+        ];
     }
 }

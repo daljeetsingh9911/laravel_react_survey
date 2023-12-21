@@ -29,10 +29,9 @@ const  App = () => {
   const checkTokenAndredirectUser =()=> {
    if(userToken || localToken){
       if(window.location.pathname == '/login'){
-         navigate('/dashboard/home');
+         navigate('/home');
       }else{
          navigate(window.location.pathname);
-
       }
    }
   } 
@@ -44,11 +43,9 @@ const  App = () => {
             <Route path="login" element={<Login />} />
             <Route path="registration" element={<Registration />} />
          </Route>
-         <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route path="home" element={<Home />} />
-            <Route path="surveys" element={<Surveys />} />
-            <Route path="surveys/create" element={<CreateSurvey />} />  
-         </Route>
+         <Route path="home" element={<Home />} />
+         <Route path="surveys" element={<Surveys />} />
+         <Route path="surveys/create" element={<CreateSurvey />} />  
       </Routes>
    </div>
   )

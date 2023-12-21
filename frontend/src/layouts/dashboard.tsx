@@ -1,13 +1,12 @@
-import { Outlet } from "react-router-dom";
 import ResponsiveAppBar from "../components/header";
 
-const DashboardLayout = () => {
+const DashboardLayout = ({children}:any) => {
 
     return(
-        <div className="h-full- w-full overflow-y " >
+        <div className="h-full-vh">
             <ResponsiveAppBar/>
-            <div className="p-5">
-                <Outlet/>
+            <div className="container pt-5 pb-5">
+               {children}
             </div>
         </div>
     )

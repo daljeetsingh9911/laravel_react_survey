@@ -40,3 +40,6 @@ body {
   font-weight: 500;
   color: #5699ff !important;
 }
+.min-height{
+  min-height: 150px;
+}

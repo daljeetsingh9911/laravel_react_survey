@@ -9,6 +9,7 @@ import { CreateSurveyValidation } from "../../utils/ValidationObject";
 import { previewPhoto } from "../../utils/untils";
 import axiosClient from "../../utils/axiosClient";
 import { ShowErrorMessage, ShowSuceessMessage } from "../../utils/SweetAlert";
+import DashboardLayout from "../../layouts/dashboard";
 
 
 
@@ -49,8 +50,7 @@ const CreateSurvey = () => {
     }
 
     return (
-        <div className="container">
-            <div className="h-full-vh">
+        <DashboardLayout>
                 <div className="text-center fs-2 mb-5 fw-bold text-uppercase">Create <span className="text-success">Survey</span></div>
             
                 <Formik
@@ -278,8 +278,7 @@ const CreateSurvey = () => {
                         )
                     }}
                 </Formik>
-            </div>
-        </div>
+        </DashboardLayout>
     );
 }
 
