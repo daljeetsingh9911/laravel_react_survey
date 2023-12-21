@@ -8,6 +8,7 @@ import { CrateSurveyinitialValues, InputFieldTypes, showOptionIf } from "../../u
 import { CreateSurveyValidation } from "../../utils/ValidationObject";
 import { previewPhoto } from "../../utils/untils";
 import axiosClient from "../../utils/axiosClient";
+import { ShowErrorMessage, ShowSuceessMessage } from "../../utils/SweetAlert";
 
 
 
@@ -34,18 +35,17 @@ const CreateSurvey = () => {
             )
       };
 
-    const handleSubmit = (values:FormikValues,{setSubmitting}:FormikHelpers<any>)  => {
-        console.log(values);
+    const handleSubmit = (values:FormikValues,{setSubmitting,resetForm}:FormikHelpers<any>)  => {
         
-        setSubmitting(false);
-
-        axiosClient.post('/survey/create', values).then((resp)=>{
-            console.log(resp);
-            
+        axiosClient.post('/survey/create', values).then(({data})=>{
+            ShowSuceessMessage('Success',data?.msg)
         }).catch((err) => {
             console.log(err);
-            
-        }).finally(()=>setSubmitting(false));
+            ShowErrorMessage('Error','Something went wrong');
+        }).finally(()=>{
+            setSubmitting(false);
+            resetForm();
+        });
     }
 
     return (
@@ -195,7 +195,14 @@ const CreateSurvey = () => {
                                                                     >
                                                                         {({ insert, remove, push }) => (
                                                                             <div>
-                                                                                <div className="my-2 text-end">
+                                                                                <div className="my-2 text-end flex justify-content-between align-items-center">
+                                                                                    <div className="pb-2">
+                                                                                        <CutsomErrorMessage
+                                                                                            name={`questions.${index}.data`}
+                                                                                            errors={errors}
+                                                                                            touched={touched}
+                                                                                        />
+                                                                                    </div>
                                                                                     <button type="button" onClick={() => {
                                                                                         push('');
                                                                                     }}>
@@ -216,12 +223,6 @@ const CreateSurvey = () => {
                                                                                                             placeholder='Please insert option value'
                                                                                                             name={`questions.${index}.data.${dataindex}`}
                                                                                                             value={data}
-                                                                                                        />
-                                                                                                        <ErrorMessage  name={`questions.${index}.data.${dataindex}`}>{msg => <div className='text-danger pt-2 fw-bolder'>{msg}</div>}</ErrorMessage>
-                                                                                                        <CutsomErrorMessage
-                                                                                                            name={`questions.${index}.data`}
-                                                                                                            errors={errors}
-                                                                                                            touched={touched}
                                                                                                         />
                                                                                                     </div>
                                                                                                         
