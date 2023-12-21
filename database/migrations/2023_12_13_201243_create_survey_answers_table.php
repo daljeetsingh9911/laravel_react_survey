@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('survey_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('surveys_id')->constrained('surveys')->cascadeOnDelete();
+            $table->foreignId('survey_id')->constrained('surveys')->cascadeOnDelete();
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
         });
