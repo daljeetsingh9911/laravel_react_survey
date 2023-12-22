@@ -27,6 +27,7 @@ const Home = () => {
             <div className="row mt-5 d-flex align-items-stretch">
 
                 <div className="col">
+                    <div className="fs-3 fw-bold pb-3">Lastest Survey</div>
                     <Card style={{ minHeight:400 }}>
                         {loading ? <Spinner animation="grow" /> : (
                             <>
@@ -54,6 +55,26 @@ const Home = () => {
                     </Card>
                 </div>
                 <div className="col">
+                    <div className="fs-3 fw-bold pb-3">Lastest Answers</div>
+                    <Card className="">
+                        <Card.Body className="">
+                            <div style={{ maxHeight:250 }}>
+                                {(dashboardData?.lastest_answers != undefined && dashboardData?.lastest_answers?.length > 0 )?(
+                                    <ul className="list-group mt-4 overflow-scroll" >
+                                        {dashboardData?.lastest_answers.map((answers)=>(
+                                                <li className="list-group-item">An item</li>
+                                            )
+                                        )}
+                                    </ul>
+                                ):(
+                                    <div className="h-full flex justify-content-center align-items-center border rounded-2"> No data found ☹️</div>
+                                )}
+                            </div>
+                        </Card.Body>
+                    </Card>
+
+                </div>
+                <div className="col">
                     <div className="d-flex flex-column h-full justify-content-evenly">
                         <Card className="bg-success text-center min-height" >
                             <Card.Body className="flex align-items-center justify-content-between">
@@ -78,28 +99,7 @@ const Home = () => {
                         </Card>
                     </div>
                 </div>
-                <div className="col">
-                    <Card className="h-full">
-                        <Card.Body className="">
-                            <Card.Title>
-                                Lastest Answers
-                            </Card.Title>
-                            <div style={{ maxHeight:300 }}>
-                                {(dashboardData?.lastest_answers != undefined && dashboardData?.lastest_answers?.length > 0 )?(
-                                    <ul className="list-group mt-4 overflow-scroll" >
-                                        {dashboardData?.lastest_answers.map((answers)=>(
-                                                <li className="list-group-item">An item</li>
-                                            )
-                                        )}
-                                    </ul>
-                                ):(
-                                    <div className="h-full flex justify-content-center align-items-center border rounded-2"> No data found ☹️</div>
-                                )}
-                            </div>
-                        </Card.Body>
-                    </Card>
 
-                </div>
             </div>
         </DashboardLayout>
 
