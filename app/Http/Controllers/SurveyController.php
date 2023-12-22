@@ -105,8 +105,9 @@ class SurveyController extends Controller
     public function destroy(Survey $survey)
     {  
         $userID = Auth::user()->id;
-        $surveyID =  $survey->user_id;
-        if($userID == $surveyID){
+        $surveyUserID =  $survey->user_id;
+
+        if($userID != $surveyUserID){
             return response([
                 'status' => 'error',
                 'msg'=>'unAuthorized user request',
@@ -114,12 +115,10 @@ class SurveyController extends Controller
         }
 
         try {
-            
             $survey->delete();
             return response([
                 'status' => 'success',
                 'msg'=>'data deleted successfully',
-                'dsds'=>$survey
             ],200);
         }catch (QueryException $e) {
             // Handle the unique constraint violation error
