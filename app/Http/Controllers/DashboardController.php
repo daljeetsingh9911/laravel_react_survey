@@ -13,7 +13,11 @@ class DashboardController extends Controller
         $userID = Auth::user()->id;
         $total = Survey::where("user_id", $userID)->count();
         $surveys = Survey::where("user_id", $userID)->latest('created_at')->first();
-        $surveys->question();
+
+        if(!empty($surveys)){
+            $surveys->question();
+        }
+
         $surveyAnswers =  SurveyAnswer::query()
                             ->join("surveys", "survey_answers.survey_id", "=" ,"surveys.id")
                             ->where("surveys.user_id", $userID)->count();
@@ -22,7 +26,7 @@ class DashboardController extends Controller
                                 ->orderBy('end_date', 'DESC')->get();
         return  [
             "total"=>$total,
-            "surveys"=>(new SurveyResource($surveys)),
+            "surveys"=>$surveys?(new SurveyResource($surveys)):[],
             "total_answers"=>$surveyAnswers,
             "lastest_answers"=>$lastest_answers
         ];

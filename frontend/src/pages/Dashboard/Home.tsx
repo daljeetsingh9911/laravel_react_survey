@@ -29,7 +29,11 @@ const Home = () => {
                 <div className="col">
                     <div className="fs-3 fw-bold pb-3">Lastest Survey</div>
                     <Card style={{ minHeight:400 }}>
-                        {loading ? <Spinner animation="grow" /> : (
+                        {(loading)? (
+                          <Spinner animation="grow" /> 
+                        ):(dashboardData?.surveys.title == undefined)?(
+                            <div className="h-full flex justify-content-center align-items-center border rounded-2 m-3"> No data found ☹️</div>
+                        ):(
                             <>
                                 <Card.Img variant="top" src={dashboardData?.surveys.image != '' ? dashboardData?.surveys.image : 'http://localhost:3000/src/assets/bg2.jpg'} />
                                 <Card.Body>
@@ -56,8 +60,13 @@ const Home = () => {
                 </div>
                 <div className="col">
                     <div className="fs-3 fw-bold pb-3">Lastest Answers</div>
-                    <Card className="">
+                    <Card className="" style={{ minHeight:400 }}>
                         <Card.Body className="">
+                        {(loading)? (
+                          <Spinner animation="grow" /> 
+                        ):(dashboardData?.lastest_answers.length)?(
+                            <div className="h-full flex justify-content-center align-items-center border rounded-2 m-4"> No data found ☹️</div>
+                        ):(
                             <div style={{ maxHeight:250 }}>
                                 {(dashboardData?.lastest_answers != undefined && dashboardData?.lastest_answers?.length > 0 )?(
                                     <ul className="list-group mt-4 overflow-scroll" >
@@ -70,6 +79,7 @@ const Home = () => {
                                     <div className="h-full flex justify-content-center align-items-center border rounded-2"> No data found ☹️</div>
                                 )}
                             </div>
+                        )}
                         </Card.Body>
                     </Card>
 
