@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SurveyResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
 use App\Models\Survey;
-use App\Models\SurveyQuestion;
 use Illuminate\Database\QueryException;
 
 class SurveyController extends Controller
@@ -19,7 +19,7 @@ class SurveyController extends Controller
      */
     public function index()
     {
-        //
+        return  SurveyResource::collection(Survey::paginate());
     }
 
     /**
@@ -87,7 +87,7 @@ class SurveyController extends Controller
      */
     public function show(Survey $survey)
     {
-        return  Survey::all();
+        return   Survey::get();
     }
 
    
@@ -103,7 +103,33 @@ class SurveyController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Survey $survey)
-    {
-       $survey->delete();
+    {  
+        $userID = Auth::user()->id;
+        $surveyID =  $survey->user_id;
+        if($userID == $surveyID){
+            return response([
+                'status' => 'error',
+                'msg'=>'unAuthorized user request',
+            ],400);
+        }
+
+        try {
+            
+            $survey->delete();
+            return response([
+                'status' => 'success',
+                'msg'=>'data deleted successfully',
+                'dsds'=>$survey
+            ],200);
+        }catch (QueryException $e) {
+            // Handle the unique constraint violation error
+            $errorCode = $e->getCode();
+            $errorMessage = $e->getMessage();
+            return response([
+                'status' => 'error',
+                'msg'=>$errorMessage
+            ],400);
+        }
+       
     }
 }
