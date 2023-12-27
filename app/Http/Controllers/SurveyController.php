@@ -119,6 +119,16 @@ class SurveyController extends Controller
             'expire_date' => date('Y-m-d H:i:s', strtotime($data['expire_date'])),
         ]);
 
+        // Not found records DELETE by ID
+        $saveQuestionId =  $survey->question()->pluck('id')->toArray();
+        $questionsPlayload = Arr::pluck($data['questions'],'id');
+        $ArrDiff = array_diff($saveQuestionId,$questionsPlayload );
+        $deleteIDs =  array_values($ArrDiff);
+
+        if(!empty($deleteIDs)){
+            $survey->question()->whereIn('id', $deleteIDs)->delete();
+        }
+
         // Update or create questions
         foreach ($data['questions'] as $k => $qus) {
             $d = null;
@@ -149,16 +159,8 @@ class SurveyController extends Controller
                 ]);
             }
         }
-
-        // Not found records DELETE by ID
-        $saveQuestionId =  $survey->question()->pluck('id')->toArray();
-        $questionsPlayload = Arr::pluck($data['questions'],'id');
-        $ArrDiff = array_diff($saveQuestionId,$questionsPlayload );
-        $deleteIDs =  array_values($ArrDiff);
-
-        if(!empty($deleteIDs)){
-            $survey->question()->whereIn('id', $deleteIDs)->delete();
-        }
+        
+       
 
         return response([
             'status' => 'success',
