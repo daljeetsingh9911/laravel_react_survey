@@ -76,11 +76,13 @@ const CreateSurvey = () => {
     const handleSubmit = (values:FormikValues,{setSubmitting,resetForm}:FormikHelpers<any>)  => {
 
         let Method = axiosClient.post;
+        let url = '/survey/create/';
         if(id != undefined){
             Method = axiosClient.put
+            url = `/survey/update/${id}`
         }
         
-        Method('/survey/create', values).then(({data})=>{
+        Method(url, values).then(({data})=>{
             ShowSuceessMessage('Success',data?.msg)
         }).catch((err) => {
             console.log(err);
