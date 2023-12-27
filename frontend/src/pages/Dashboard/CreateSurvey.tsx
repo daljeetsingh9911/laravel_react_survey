@@ -123,7 +123,6 @@ const CreateSurvey = () => {
                     onSubmit={handleSubmit}
                 >
                     {({ values,errors,touched, handleChange, handleSubmit, handleBlur,isSubmitting }) => {
-                        console.log(values);
                         
                             return (
                             <form action="" onSubmit={handleSubmit}>
