@@ -9,11 +9,12 @@ use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
 use App\Models\Survey;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Arr;
 
 class SurveyController extends Controller
 {
 
-    protected $inpType = ['radio','checbox','select'];
+    protected $inpType = ['radio','checkbox','select'];
     /**
      * Display a listing of the resource.
      */
@@ -101,9 +102,68 @@ class SurveyController extends Controller
      */
     public function update(UpdateSurveyRequest $request, Survey $survey)
     {
-            response([
-                $survey
-            ]);
+        $data = $request->validated();
+        $userID = Auth::user()->id;
+        if($userID != $survey->user_id){
+            return response([
+                'status' => 'error',
+                'msg'=>'unAuthorized user request',
+            ],400);
+        }
+
+        // Update the survey
+        $survey->update([
+            'title' => $data['title'],
+            'slug' => Str::slug($data['title']),
+            'description' => $data['description'],
+            'expire_date' => date('Y-m-d H:i:s', strtotime($data['expire_date'])),
+        ]);
+
+        // Update or create questions
+        foreach ($data['questions'] as $k => $qus) {
+            $d = null;
+            if (in_array($qus['type'], $this->inpType)) {
+                $d = json_encode($qus['data']);
+            }
+            // Check if the question already exists, and update it if it does
+            
+            if (!empty($qus['id'])) {
+                $question = $survey->question()->find($qus['id']);
+                if (!empty($question)) {
+                   
+                    $question->update([
+                        'question' => $qus['question'],
+                        'description' => $qus['description'],
+                        'type' => $qus['type'],
+                        'data' => $d,
+                    ]);
+                    
+                }
+            } else {
+                // If the question doesn't exist, create a new one
+                $survey->question()->create([
+                    'question' => $qus['question'],
+                    'description' => $qus['description'],
+                    'type' => $qus['type'],
+                    'data' => $d,
+                ]);
+            }
+        }
+
+        // Not found records DELETE by ID
+        $saveQuestionId =  $survey->question()->pluck('id')->toArray();
+        $questionsPlayload = Arr::pluck($data['questions'],'id');
+        $ArrDiff = array_diff($saveQuestionId,$questionsPlayload );
+        $deleteIDs =  array_values($ArrDiff);
+
+        if(!empty($deleteIDs)){
+            $survey->question()->whereIn('id', $deleteIDs)->delete();
+        }
+
+        return response([
+            'status' => 'success',
+            'msg' => 'Survey has been updated successfully'
+        ]);
     }
 
     /**
@@ -133,7 +193,7 @@ class SurveyController extends Controller
             $errorMessage = $e->getMessage();
             return response([
                 'status' => 'error',
-                'msg'=>$errorMessage
+                'msg'=>$errorMessage,
             ],400);
         }
        

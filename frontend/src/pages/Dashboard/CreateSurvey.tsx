@@ -83,9 +83,11 @@ const CreateSurvey = () => {
         }
         
         Method(url, values).then(({data})=>{
-            ShowSuceessMessage('Success',data?.msg)
+            ShowSuceessMessage('Success',data?.msg);
+            if(id != undefined){
+                FetchSurvey();
+            }
         }).catch((err) => {
-            console.log(err);
             ShowErrorMessage('Error','Something went wrong');
         }).finally(()=>{
             setSubmitting(false);
@@ -121,6 +123,7 @@ const CreateSurvey = () => {
                     onSubmit={handleSubmit}
                 >
                     {({ values,errors,touched, handleChange, handleSubmit, handleBlur,isSubmitting }) => {
+                        console.log(values);
                         
                             return (
                             <form action="" onSubmit={handleSubmit}>

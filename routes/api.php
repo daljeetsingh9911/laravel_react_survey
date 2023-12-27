@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/survey/{survey}', [SurveyController::class,'getSurveyById']);
     Route::delete('/survey/{survey}', [SurveyController::class,'destroy']);
     Route::post('/survey/create', [SurveyController::class,'store']);
-    Route::put('/survey/create', [SurveyController::class,'update']);
+    Route::put('/survey/update/{survey}', [SurveyController::class,'update']);
     Route::post('/survey/update', [SurveyController::class,'put']);
 });
 
