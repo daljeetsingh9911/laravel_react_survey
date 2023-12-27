@@ -2,6 +2,7 @@ import { Col } from "react-bootstrap";
 
 import { SingleSurvey } from "../../utils/Types";
 import imgBg from '../../assets/bg2.jpg';
+import { Link } from "react-router-dom";
 
 interface SurveyItemProps {
     survey: SingleSurvey,
@@ -9,7 +10,7 @@ interface SurveyItemProps {
 }
 
 const SurveyItem = (props: SurveyItemProps) => {
-    const { title, description, id, slug } = props.survey;
+    const { title, description, id} = props.survey;
     const markup = { __html: description };
 
     const deleteIteam = () => {
@@ -27,13 +28,13 @@ const SurveyItem = (props: SurveyItemProps) => {
                     >
                     </p>
                     <div className="flex gap-4 justify-content-end">
-                        <span role="button" >
-                            <i className="bi bi-pencil-square"></i>
-                        </span>
+                         <Link to={`/surveys/edit/${id}`} >
+                                <i className="bi bi-pencil-square"></i>
+                        </Link>
 
-                        <a href={slug} target="_blank">
+                        <Link to={`surveys/edit/${id}`} >
                             <i className="bi bi-box-arrow-up-right"></i>
-                        </a>
+                        </Link>
 
                         <span onClick={deleteIteam} role="button" >
                             <i className="bi bi-trash3 text-danger"></i>

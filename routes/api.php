@@ -24,8 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [Authentication::class,'logout'])->name('Logout');
     Route::get('/dashboard',[DashboardController::class,'index'])->name('Dashboard');
     Route::get('/survey/all', [SurveyController::class,'index']);
+    Route::get('/survey/{survey}', [SurveyController::class,'getSurveyById']);
     Route::delete('/survey/{survey}', [SurveyController::class,'destroy']);
     Route::post('/survey/create', [SurveyController::class,'store']);
+    Route::put('/survey/create', [SurveyController::class,'update']);
     Route::post('/survey/update', [SurveyController::class,'put']);
 });
 

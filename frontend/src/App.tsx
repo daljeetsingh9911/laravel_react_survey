@@ -3,7 +3,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { CreateSurvey, Home, Login,Registration,Surveys } from "./pages";
 import AuthLayout from "./layouts/auth";
-import DashboardLayout from "./layouts/dashboard";
 import { MyContext } from "./context/surveyContext";
 
 
@@ -45,6 +44,7 @@ const  App = () => {
          </Route>
          <Route path="home" element={<Home />} />
          <Route path="surveys" element={<Surveys />} />
+         <Route path="surveys/edit/:id?" element={<CreateSurvey />} />
          <Route path="surveys/create" element={<CreateSurvey />} />  
       </Routes>
    </div>

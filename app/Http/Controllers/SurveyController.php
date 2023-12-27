@@ -23,6 +23,10 @@ class SurveyController extends Controller
         return  SurveyResource::collection(Survey::where('user_id', $userID)->paginate());
     }
 
+    public function getSurveyById(Survey $survey){
+        return  new  SurveyResource($survey);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -97,7 +101,9 @@ class SurveyController extends Controller
      */
     public function update(UpdateSurveyRequest $request, Survey $survey)
     {
-        //
+            response([
+                $survey
+            ]);
     }
 
     /**

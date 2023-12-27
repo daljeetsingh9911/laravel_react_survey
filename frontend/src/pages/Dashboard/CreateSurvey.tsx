@@ -1,19 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ErrorMessage, Field, FieldArray, Formik, FormikHelpers, FormikValues } from "formik";
-import { Badge, Button, Spinner, Stack } from "react-bootstrap";
+import { Badge, Spinner, Stack } from "react-bootstrap";
 
 
-import { Question } from "../../utils/Types";
+import { CreateSurveyForm, Question } from "../../utils/Types";
 import { CrateSurveyinitialValues, InputFieldTypes, showOptionIf } from "../../utils/initValues";
 import { CreateSurveyValidation } from "../../utils/ValidationObject";
 import { previewPhoto } from "../../utils/untils";
 import axiosClient from "../../utils/axiosClient";
 import { ShowErrorMessage, ShowSuceessMessage } from "../../utils/SweetAlert";
 import DashboardLayout from "../../layouts/dashboard";
-
-
+import { useParams } from "react-router-dom";
 
 const CreateSurvey = () => {
+    // the dynamic pieces of the URL.
+    let { id } = useParams();
+    const [initValues, setInitValues] = useState<CreateSurveyForm>(CrateSurveyinitialValues);
+    const [editFormLoading, setEditFormLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const Fileinput = document.getElementById('image_url') as HTMLInputElement;
@@ -24,6 +27,39 @@ const CreateSurvey = () => {
             Fileinput.removeEventListener('change', previewPhoto);
         };
     }, []);
+
+    useEffect(() => {
+        FetchSurvey()
+    }, []);
+
+    const FetchSurvey = () =>{
+        setEditFormLoading(true);
+        axiosClient.get<any>('/survey/'+id).then(({data})=>{
+            let d = data.data;
+            
+            const originalDate = new Date(d.expire_date); 
+            setInitValues((prev)=>({
+                ...prev,
+                image_url: d.image_url,
+                title: d.title,
+                status: false,
+                description: d.description,
+                expire_date: originalDate.toISOString().slice(0,10),
+                questions: d.questions.map((question:any)=>(
+                    {
+                        ...question,
+                        data: hasJsonStructure(question.data)
+                    }
+                )),
+             }));
+
+        }).catch((err)=>{
+            console.log(err);
+            
+        }).finally(()=>{
+            setEditFormLoading(false);
+        })
+    }
 
     const CutsomErrorMessage = ({name,errors,touched}:{name:string,errors:any,touched:any})=> {
         let feildInfo:string[] = name?.split('.');
@@ -36,9 +72,15 @@ const CreateSurvey = () => {
             )
       };
 
+
     const handleSubmit = (values:FormikValues,{setSubmitting,resetForm}:FormikHelpers<any>)  => {
+
+        let Method = axiosClient.post;
+        if(id != undefined){
+            Method = axiosClient.put
+        }
         
-        axiosClient.post('/survey/create', values).then(({data})=>{
+        Method('/survey/create', values).then(({data})=>{
             ShowSuceessMessage('Success',data?.msg)
         }).catch((err) => {
             console.log(err);
@@ -49,16 +91,35 @@ const CreateSurvey = () => {
         });
     }
 
+    function hasJsonStructure(str:any):string[] {
+        if (typeof str !== 'string') return [];
+        try {
+            const result = JSON.parse(str);
+            // const type = Object.prototype.toString.call(result);
+            // return type === '[object Object]'  || type === '[object Array]';
+            return result;
+        } catch (err) {
+            return [];
+        }
+    }
+
     return (
         <DashboardLayout>
-                <div className="text-center fs-2 mb-5 fw-bold text-uppercase">Create <span className="text-success">Survey</span></div>
+                <div className="text-center fs-2 mb-5 fw-bold text-uppercase">{id?'Update':'Create'} <span className="text-success">Survey</span></div>
             
+                {editFormLoading?(
+                <div className="text-center">
+                    <Spinner  size="sm"/>
+                </div>
+                ):(
                 <Formik
-                    initialValues={CrateSurveyinitialValues}
+                    enableReinitialize
+                    initialValues={initValues}
                     validationSchema={CreateSurveyValidation}
                     onSubmit={handleSubmit}
                 >
                     {({ values,errors,touched, handleChange, handleSubmit, handleBlur,isSubmitting }) => {
+                        
                             return (
                             <form action="" onSubmit={handleSubmit}>
                                 
@@ -119,7 +180,7 @@ const CreateSurvey = () => {
                                                     <ErrorMessage name="questions" >{msg => <div className='text-danger pt-2 fw-bolder'>{msg}</div>}</ErrorMessage>
                                                 </div>
                                                 <Stack gap={3} >
-                                                    {values.questions.length > 0 && values.questions.map((ques: Question, index) => (
+                                                    {values?.questions.length > 0 && values.questions.map((ques: Question, index) => (
                                                         <div key={`optionsParent_${index}`} className="shadow-sm border rounded-2 px-2 py-3">
                                                             <div className="flex align-items-center justify-content-between ">
 
@@ -203,14 +264,14 @@ const CreateSurvey = () => {
                                                                                             touched={touched}
                                                                                         />
                                                                                     </div>
-                                                                                    <button type="button" onClick={() => {
+                                                                                    <button type="button"  onClick={() => {
                                                                                         push('');
                                                                                     }}>
                                                                                         Add Options
                                                                                     </button>
                                                                                 </div>
                                                                                 <Stack gap={3}>
-                                                                                    {ques.data.length > 0 && ques.data.map((data, dataindex) => {
+                                                                                    {ques.data.length > 0 &&  (ques.data).map((data, dataindex) => {
                                                                                         return (
                                                                                             <div className="border border-b-1 flex justify-content-between p-2" key={`questions_inner_data_${dataindex}`}>
                                                                                                 <div className="flex-fill align-items-center" >
@@ -268,16 +329,17 @@ const CreateSurvey = () => {
                                 </Stack>
 
                                 <div className="text-center mt-5">
-                                    <Button type="submit" variant="primary"
+                                    <button type="submit" className="btn btn-success btn-md px-5"
                                      disabled={isSubmitting?true:false}
                                     >
-                                        Submit {isSubmitting&&<Spinner size="sm" />}   
-                                    </Button>
+                                       {id?'Update':'Submit'}  {isSubmitting&&<Spinner size="sm" />}   
+                                    </button>
                                 </div>
                             </form>
                         )
                     }}
                 </Formik>
+                )}
         </DashboardLayout>
     );
 }
