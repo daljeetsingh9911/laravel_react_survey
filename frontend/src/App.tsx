@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
-import { CreateSurvey, Home, Login,Registration,Surveys } from "./pages";
+import { CreateSurvey, Home, Login,Questions,Registration,Surveys } from "./pages";
 import AuthLayout from "./layouts/auth";
 import { MyContext } from "./context/surveyContext";
 
@@ -14,7 +14,9 @@ const  App = () => {
 
    // use effect if the page have not any base url
   useEffect(() => {
-      if(!localToken || window.location.pathname == '/'){
+   let path =  window.location.pathname;
+   
+      if((!localToken || path == '/' ) && (!path.split('/').includes('public'))){
           navigate('/login');
       }
       checkTokenAndredirectUser();
@@ -41,6 +43,7 @@ const  App = () => {
          <Route path="/" element={<AuthLayout/>}>
             <Route path="login" element={<Login />} />
             <Route path="registration" element={<Registration />} />
+            <Route path="public/:slug" element={<Questions />} />
          </Route>
          <Route path="home" element={<Home />} />
          <Route path="surveys" element={<Surveys />} />

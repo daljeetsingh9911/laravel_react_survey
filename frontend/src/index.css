@@ -43,3 +43,9 @@ body {
 .min-height{
   min-height: 150px;
 }
+
+.qus-index {
+  font-weight: 900;
+  position: absolute;
+  left: -20px;
+}

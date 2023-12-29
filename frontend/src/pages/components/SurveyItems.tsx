@@ -10,7 +10,7 @@ interface SurveyItemProps {
 }
 
 const SurveyItem = (props: SurveyItemProps) => {
-    const { title, description, id} = props.survey;
+    const { title, description, id,slug} = props.survey;
     const markup = { __html: description };
 
     const deleteIteam = () => {
@@ -32,7 +32,7 @@ const SurveyItem = (props: SurveyItemProps) => {
                                 <i className="bi bi-pencil-square"></i>
                         </Link>
 
-                        <Link to={`surveys/edit/${id}`} >
+                        <Link to={`/public/${slug}`} >
                             <i className="bi bi-box-arrow-up-right"></i>
                         </Link>
 
