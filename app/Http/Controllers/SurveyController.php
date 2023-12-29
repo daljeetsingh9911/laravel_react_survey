@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
 use App\Models\Survey;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Arr;
 
@@ -26,6 +27,20 @@ class SurveyController extends Controller
 
     public function getSurveyById(Survey $survey){
         return  new  SurveyResource($survey);
+    }
+
+    public function getSurveyBySlug($slug){
+        
+        if($slug){
+            $survey = Survey::where('slug', $slug)->first();
+            if($survey){
+                return  new  SurveyResource($survey);
+            }
+        }
+        return response([
+            'status' => 'error',
+            'msg'=>'Survey not found'
+        ],404);
     }
 
     /**
@@ -93,7 +108,7 @@ class SurveyController extends Controller
      */
     public function show(Survey $survey)
     {
-        return   Survey::get();
+        return Survey::get();
     }
 
    
